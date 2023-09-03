@@ -1,47 +1,24 @@
-import { Component } from 'react';
-import css from './ImageGalleryItem.module.css';
-import { Modal } from '../Modal/Modal';
 import PropTypes from 'prop-types';
 
-export class ImageGalleryItem extends Component {
-  state = {
-    modalIsOpnet: false,
-  };
+import styles from './ImageGalleryItem.module.css';
 
-  hendelShowModal = value => {
-    console.log('hendelShowModal');
-    this.setState({ modalImage: value });
-  };
+const ImageGalleryItem = ({ preview, fullSize, showImage }) => {
+  return (
+    <li
+      className={styles.imageGalleryItem}
+      onClick={() => {
+        showImage(fullSize);
+      }}
+    >
+      <img src={preview} className={styles.imageGalleryItem_image} alt="" />
+    </li>
+  );
+};
 
-  hendelCloseModal = () => {
-    this.setState(prevState => ({ modalIsOpnet: !prevState.modalIsOpnet }));
-  };
-  render() {
-    const { smallImage, altPhotos, lagImage } = this.props;
-    return (
-      <>
-        <li className={css.ImageGalleryItem}>
-          <img
-            className={css['ImageGalleryItem-image']}
-            src={smallImage}
-            alt={altPhotos}
-            onClick={this.hendelCloseModal}
-          />
-        </li>
-        {this.state.modalIsOpnet && (
-          <Modal
-            modalImage={lagImage}
-            closeModal={this.hendelCloseModal}
-            altPhotos={altPhotos}
-          />
-        )}
-      </>
-    );
-  }
-}
+export default ImageGalleryItem;
 
 ImageGalleryItem.propTypes = {
-  smallImage: PropTypes.string.isRequired,
-  altPhotos: PropTypes.string.isRequired,
-  lagImage: PropTypes.string.isRequired,
+  preview: PropTypes.string.isRequired,
+  fullSize: PropTypes.string.isRequired,
+  showImage: PropTypes.func.isRequired,
 };

@@ -1,42 +1,44 @@
-import React, { Component } from 'react';
-import css from './SearchBar.module.css';
-import { FcSearch } from 'react-icons/fc';
+import { Component } from 'react';
 import PropTypes from 'prop-types';
+import styles from './SearchBar.module.css';
 
-export class SearchBar extends Component {
+class Searchbar extends Component {
   state = {
-    name: '',
+    search: '',
   };
 
-  handelChange = e => {
-    const { name, value } = e.target;
+  handleChange = ({ target }) => {
+    const { name, value } = target;
     this.setState({ [name]: value });
   };
 
-  handelSubmit = e => {
+  handleSubmit = e => {
     e.preventDefault();
-    // console.log(this.state.name);
-    this.props.onSubmitHendler(this.state.name);
-    this.setState({ name: '' });
+    const { onSubmit } = this.props;
+    onSubmit({ ...this.state });
+    this.setState({ search: '' });
   };
+
   render() {
-    const { name } = this.state;
+    const { search } = this.state;
+    const { handleChange, handleSubmit } = this;
+
     return (
-      <header className={css.searchbar}>
-        <form className={css.searchform} onSubmit={this.handelSubmit}>
-          <button type="submit" className={css.searchFormButton}>
-            <span>
-              <FcSearch />
-            </span>
+      <header className={styles.Searchbar}>
+        <form className={styles.SearchForm} onSubmit={handleSubmit}>
+          <button type="submit" className={styles.searchFormButton}>
+            <span className={styles.searchFormButtonLabel}>Search</span>
           </button>
 
           <input
-            onChange={this.handelChange}
-            className={css.searchFormInput}
+            name="search"
+            className={styles.SearchFormInput}
+            value={search}
+            onChange={handleChange}
             type="text"
+            autoComplete="off"
+            autoFocus
             placeholder="Search images and photos"
-            name="name"
-            value={name}
           />
         </form>
       </header>
@@ -44,6 +46,8 @@ export class SearchBar extends Component {
   }
 }
 
-SearchBar.propTypes = {
-  onSubmitHendler: PropTypes.func.isRequired,
+export default Searchbar;
+
+Searchbar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
 };
